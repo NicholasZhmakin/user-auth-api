@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import Registration from "./components/Registration";
+import Login from "./components/Login";
+import Main from "./components/MainPage/Main";
+import Cabinet from "./components/Cabinet";
+import Default from "./components/Default";
+import { connect } from "react-redux";
 
-function App() {
+const App = ({ token }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Switch>
+          <Route exact path="/" component={Registration} />
+          <Route exact path="/login" component={Login} />
+          {token ? <Route exact path="/main" component={Main} /> : null}
+          {token ? <Route exact path="/cabinet" component={Cabinet} /> : null}
+          <Route component={Default} />
+        </Switch>
+      </div>
+    </Router>
   );
-}
+};
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    token: state.loginR.token
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(App);
